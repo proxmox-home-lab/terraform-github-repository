@@ -4,10 +4,10 @@ module "example" {
 
   name = module.this.id
 
+  template = var.template
+
   description = var.description
   visibility  = var.visibility
-
-  template = var.template
 
   homepage_url = var.homepage_url
   topics       = var.topics
@@ -62,6 +62,4 @@ module "example" {
   teams       = var.teams
   users       = var.users
   rulesets    = var.rulesets
-
 }
-
