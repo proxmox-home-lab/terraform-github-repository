@@ -115,7 +115,7 @@ variable "squash_merge_commit_title" {
 variable "squash_merge_commit_message" {
   description = "Squash merge commit message. Must be PR_BODY, COMMIT_MESSAGES or BLANK."
   type        = string
-  default     = "COMMIT_MESSAGE"
+  default     = "COMMIT_MESSAGES"
 
   validation {
     condition     = contains(["PR_BODY", "COMMIT_MESSAGES", "BLANK"], var.squash_merge_commit_message)
