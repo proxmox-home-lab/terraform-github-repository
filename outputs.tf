@@ -50,7 +50,7 @@ output "webhooks_urls" {
 
 output "collaborators_invitation_ids" {
   description = "Collaborators invitation IDs"
-  value       = module.this.enabled ? github_repository_collaborators.default[*].invitation_ids : []
+  value       = var.enabled ? github_repository_collaborators.default[*].invitation_ids : []
 }
 
 output "rulesets_etags" {
