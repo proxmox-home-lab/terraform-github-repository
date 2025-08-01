@@ -1,3 +1,19 @@
+variable "enabled" {
+  description = "Enable or disable the repository creation"
+  type        = bool
+  default     = true
+}
+
+variable "name" {
+  description = "Name of the repository"
+  type        = string
+
+  validation {
+    condition     = can(regex("^[a-zA-Z0-9][a-zA-Z0-9-]{0,38}$", var.name))
+    error_message = "Repository name must be alphanumeric and can contain hyphens, but cannot start or end with a hyphen and must be between 1 and 39 characters long."
+  }
+}
+
 variable "description" {
   description = "Description of the repository"
   type        = string
