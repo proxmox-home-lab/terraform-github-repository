@@ -1,7 +1,7 @@
 resource "github_repository" "default" {
-  count = module.this.enabled ? 1 : 0
+  count = var.enabled ? 1 : 0
 
-  name        = module.this.id
+  name        = var.name
   description = var.description
   visibility  = var.visibility
 
@@ -79,7 +79,7 @@ resource "github_repository" "default" {
 }
 
 resource "github_branch_default" "default" {
-  count = module.this.enabled && var.auto_init ? 1 : 0
+  count = var.enabled && var.auto_init ? 1 : 0
 
   repository = join("", github_repository.default[*].name)
   branch     = var.default_branch
@@ -90,7 +90,7 @@ resource "github_branch_default" "default" {
 }
 
 resource "github_repository_autolink_reference" "default" {
-  for_each = module.this.enabled ? var.autolink_references : {}
+  for_each = var.enabled ? var.autolink_references : {}
 
   repository = join("", github_repository.default[*].name)
 
@@ -101,7 +101,7 @@ resource "github_repository_autolink_reference" "default" {
 
 
 resource "github_repository_custom_property" "default" {
-  for_each = module.this.enabled ? var.custom_properties : {}
+  for_each = var.enabled ? var.custom_properties : {}
 
   repository    = join("", github_repository.default[*].name)
   property_name = each.key
@@ -122,7 +122,7 @@ resource "github_repository_custom_property" "default" {
 }
 
 locals {
-  environments = module.this.enabled ? {
+  environments = var.enabled ? {
     for k, v in nonsensitive(var.environments) : k => {
       wait_timer               = v.wait_timer
       can_admins_bypass        = v.can_admins_bypass
@@ -256,12 +256,12 @@ resource "github_actions_environment_secret" "default" {
 }
 
 locals {
-  variables   = module.this.enabled ? var.variables : {}
-  secrets     = module.this.enabled ? { for k, v in nonsensitive(var.secrets) : k => sensitive(v) } : {}
-  deploy_keys = module.this.enabled ? var.deploy_keys : {}
-  webhooks    = module.this.enabled ? var.webhooks : {}
-  labels      = module.this.enabled ? var.labels : {}
-  rulesets    = module.this.enabled ? var.rulesets : {}
+  variables   = var.enabled ? var.variables : {}
+  secrets     = var.enabled ? { for k, v in nonsensitive(var.secrets) : k => sensitive(v) } : {}
+  deploy_keys = var.enabled ? var.deploy_keys : {}
+  webhooks    = var.enabled ? var.webhooks : {}
+  labels      = var.enabled ? var.labels : {}
+  rulesets    = var.enabled ? var.rulesets : {}
 }
 
 resource "github_actions_variable" "default" {
@@ -310,7 +310,7 @@ resource "github_issue_label" "default" {
 }
 
 resource "github_repository_collaborators" "default" {
-  count = module.this.enabled && length(var.teams) > 0 || length(var.users) > 0 ? 1 : 0
+  count = var.enabled && length(var.teams) > 0 || length(var.users) > 0 ? 1 : 0
 
   repository = join("", github_repository.default[*].name)
 
